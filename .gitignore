@@ -11,3 +11,5 @@ build.number
 .ruby-version
 bin-test
 test-reports
+/nbproject/private/
+/build/

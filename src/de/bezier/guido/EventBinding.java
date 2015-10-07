@@ -2,6 +2,10 @@ package de.bezier.guido;
 
 import java.lang.reflect.Method;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EventBinding
 {
@@ -18,7 +22,7 @@ public class EventBinding
 	public EventBinding ( String eventName, Object targetObject, Method targetMethod )
 	{
 		this.eventName = eventName;
-		targetWeakReference = new WeakReference<Object>(targetObject);
+		targetWeakReference = new WeakReference<>(targetObject);
 		this.targetMethod = targetMethod;
 	}
 
@@ -34,19 +38,18 @@ public class EventBinding
 					try {
 						targetMethod.setAccessible( true );
 					} catch ( SecurityException se ) {
-						se.printStackTrace();
+						Logger.getLogger(EventBinding.class.getName()).log(Level.SEVERE, null, se);
 					}
 				}
 				try {
 					targetMethod.invoke( target, values );
-				} catch ( Exception e ) {
-					e.printStackTrace();
+				} catch ( IllegalAccessException | IllegalArgumentException | InvocationTargetException e ) {
+					Logger.getLogger(EventBinding.class.getName()).log(Level.SEVERE, null, e);
 
-					System.err.println(String.format(
-						"EventBinding.send():\n\t-> %s\n\t() %s\n\t.. %s",
+					System.err.println(String.format("EventBinding.send():\n\t-> %s\n\t() %s\n\t.. %s",
 						target.toString(),
 						targetMethod.toString(),
-						values.toString()
+						Arrays.toString(values)
 					));
 				}	
 			}

@@ -1,239 +1,73 @@
-<project name="Guido" default="release" basedir="./">
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- You may freely edit this file. See commented blocks below for -->
+<!-- some examples of how to customize the build. -->
+<!-- (If you delete it and reopen the project it will be recreated.) -->
+<!-- By default, only the Clean and Build commands use this build script. -->
+<!-- Commands such as Run, Debug, and Test only use this build script if -->
+<!-- the Compile on Save feature is turned off for the project. -->
+<!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
+<!-- in the project's Project Properties dialog box.-->
+<project name="MonkstoneGuido" default="default" basedir=".">
+    <description>Builds, tests, and runs the project MonkstoneGuido.</description>
+    <import file="nbproject/build-impl.xml"/>
+    <!--
 
-	<description>
+    There exist several targets which are by default empty and which can be 
+    used for execution of your tasks. These targets are usually executed 
+    before and after some main targets. They are: 
 
-		Guido, as in "GUI do!"
+      -pre-init:                 called before initialization of project properties
+      -post-init:                called after initialization of project properties
+      -pre-compile:              called before javac compilation
+      -post-compile:             called after javac compilation
+      -pre-compile-single:       called before javac compilation of single file
+      -post-compile-single:      called after javac compilation of single file
+      -pre-compile-test:         called before javac compilation of JUnit tests
+      -post-compile-test:        called after javac compilation of JUnit tests
+      -pre-compile-test-single:  called before javac compilation of single JUnit test
+      -post-compile-test-single: called after javac compilation of single JUunit test
+      -pre-jar:                  called before JAR building
+      -post-jar:                 called after JAR building
+      -post-clean:               called after cleaning build products
 
-		https://github.com/fjenett/Guido
+    (Targets beginning with '-' are not intended to be called on their own.)
 
-	</description>
+    Example of inserting an obfuscator after compilation could look like this:
 
-	<property name="libraryName"   value="Guido" />
-	<property name="versionNumber" value="0.1.0" />
-	<property name="author"        value="Florian Jenett"/>
-	<property name="copyright"     value="(c) 2012-2014"/>
+        <target name="-post-compile">
+            <obfuscate>
+                <fileset dir="${build.classes.dir}"/>
+            </obfuscate>
+        </target>
 
-	<buildnumber file="resources/build.number" />
+    For list of available properties check the imported 
+    nbproject/build-impl.xml file. 
 
-	<property name="src"  value="src" />
-	<property name="src-test"  value="src-test" />
-	<property name="bin"  value="bin" />
-	<property name="bin-test"  value="bin-test" />
-	<property name="test-reports"  value="test-reports" />
-	<property name="dist" value="${libraryName}" />
 
-	<property name="java.target.version" value="1.5" />
+    Another way to customize the build is by overriding existing main targets.
+    The targets of interest are: 
 
-	<!--property name="processing.classes" location="/Applications/Processing.app/Contents/Resources/Java/"/-->
-	<property name="processing.classes"
-			  location="/Users/fjenett/Repos/processing/build/macosx/work/Processing.app/Contents/Java/"/>
-	<property name="processing.libs"
-			  location="/Users/fjenett/Documents/Processing/libraries"/>
+      -init-macrodef-javac:     defines macro for javac compilation
+      -init-macrodef-junit:     defines macro for junit execution
+      -init-macrodef-debug:     defines macro for class debugging
+      -init-macrodef-java:      defines macro for class execution
+      -do-jar:                  JAR building
+      run:                      execution of project 
+      -javadoc-build:           Javadoc generation
+      test-report:              JUnit report generation
 
-	<path id="library-classpath">
-		<fileset dir="${processing.classes}" >
-			<include name="core/library/core.jar"/>
-		</fileset>
-	</path>
+    An example of overriding the target for project execution could look like this:
 
-	<taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
-	           			   classpath="../_resources/closure-compiler/compiler.jar" />
+        <target name="run" depends="MonkstoneGuido-impl.jar">
+            <exec dir="bin" executable="launcher.exe">
+                <arg file="${dist.jar}"/>
+            </exec>
+        </target>
 
-	<!-- + + + + + + + + + + + + + + + + + + + + + + +
-		BUILD
-	 + + + + + + + + + + + + + + + + + + + + + + + -->
-	<target name="build">
+    Notice that the overridden target depends on the jar target and not only on 
+    the compile target as the regular run target does. Again, for a list of available 
+    properties which you can use, check the target you are overriding in the
+    nbproject/build-impl.xml file. 
 
-		<delete dir="${bin}" />
-		<mkdir dir="${bin}" />
-
-		<javac srcdir="${src}" destdir="${bin}" source="${java.target.version}">
-			<classpath>
-				<path refid="library-classpath"/>
-			</classpath>
-		</javac>
-
-		<concat destfile="${bin}/${libraryName}.js">
-			<fileset file="src-js/*.js" />
-		</concat>
-
-	</target>
-
-	<!-- + + + + + + + + + + + + + + + + + + + + + + +
-		PACKAGE
-	 + + + + + + + + + + + + + + + + + + + + + + + -->
-	<target name="package" depends="build">
-
-		<delete dir="${dist}" />
-		<mkdir dir="${dist}" />
-		<mkdir dir="${dist}/library" />
-
-		<jar jarfile="${dist}/library/${libraryName}.jar" basedir="${bin}"/>
-
-		<jscomp compilationLevel="simple"
-				warning="default"
-		        debug="false"
-				output="${dist}/library/${libraryName}.js"
-				prettyprint="true" >
-			<sources dir="${bin}">
-				<file name="${libraryName}.js" />
-			</sources>
-		</jscomp>
-
-		<mkdir dir="${dist}/examples" />
-		<copy todir="${dist}/examples">
-			<fileset dir="examples">
-				<exclude name="**/web-export" />
-				<exclude name="**/web-export/**" />
-				<exclude name="**/.DS_Store" />
-			</fileset>
-		</copy>
-
-		<mkdir dir="${dist}/source" />
-		<copy todir="${dist}/source/java">
-			<fileset dir="${src}">
-				<include name="**/*.java" />
-				<exclude name="**/.DS_Store" />
-			</fileset>
-		</copy>
-		<copy todir="${dist}/source/js">
-			<fileset dir="${src}-js">
-				<include name="**/*.js" />
-				<exclude name="**/.DS_Store" />
-			</fileset>
-		</copy>
-		<copy tofile="${dist}/source/readme.txt">
-			<fileset file="resources/source-note.txt" />
-		</copy>
-
-		<copy todir="${dist}">
-			<fileset file="resources/library.properties" />
-			<fileset file="readme.md" />
-		</copy>
-		<replaceregexp file="${dist}/library.properties" flags="g"
-  					   match="@@VERSION@@" replace="${build.number}" />
-		<replaceregexp file="${dist}/library.properties" flags="g"
-  					   match="@@PRETTYVERSION@@" replace="${versionNumber}" />
-
-	</target>
-
-	<!-- + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-		DOCUMENTATION
-	 + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
-	<target name="documentation" depends="package">
-
-		<mkdir dir="${dist}/documentation" />
-	 	<javadoc bottom="processing library ${libraryName} by ${author}. ${copyright}"
-				 destdir="${dist}/documentation"
-				 verbose="false"
-				 stylesheetfile="resources/stylesheet.css"
-				 doctitle="${libraryName} Java documentation"
-				 public="true" version="false"
-				 windowtitle="${libraryName} Java documentation">
-	 		<fileset dir="${src}" defaultexcludes="yes">
-				<include name="**/*"/>
-			</fileset>
-			<classpath>
-				<path refid="library-classpath" />
-			</classpath>
-	 	</javadoc>
-
-	</target>
-
-	<!-- + + + + + + + + + + + + + + + + + + + + + + +
-		INSTALL
-	 + + + + + + + + + + + + + + + + + + + + + + + -->
-	<target name="install" depends="package" >
-
-		<delete dir="${processing.libs}/${libraryName}" />
-		<mkdir dir="${processing.libs}/${libraryName}" />
-
-		<copy todir="${processing.libs}/${libraryName}">
-			<fileset dir="${dist}" />
-		</copy>
-
-		<copy todir="${libraryName}">
-			<fileset dir="${dist}" />
-		</copy>
-
-	</target>
-
-	<!-- + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-		RELEASE
-	 + + + + + + + + + + + + + + + + + + + + + + + + + + + + -->
-	<target name="release" depends="install">
-
-	  	<zip destfile="releases/${libraryName}-${versionNumber}.zip">
-	  		<zipfileset dir="">
-				<include name="${dist}/**/**" />
-			</zipfileset>
-	  	</zip>
-
-		<copy tofile="releases/${libraryName}.zip">
-			<fileset file="releases/${libraryName}-${versionNumber}.zip" />
-		</copy>
-
-		<copy tofile="releases/${libraryName}.txt">
-			<fileset file="${dist}/library.properties" />
-		</copy>
-
-	</target>
-
-	<!-- + + + + + + + + + + + + + + + + + + + + + + +
-		CLEAN
-	 + + + + + + + + + + + + + + + + + + + + + + + -->
-	<target name="clean">
-
-		<delete dir="${bin}" />
-		<delete dir="${dist}" />
-		<delete dir="${libraryName}" />
-
-	</target>
-
-	<!-- + + + + + + + + + + + + + + + + + + + + + + +
-		TEST
-	 + + + + + + + + + + + + + + + + + + + + + + + -->
-	<target name="test" depends="build-test">
-
-		<mkdir dir="${test-reports}"/>
-
-		<junit printsummary="yes" haltonfailure="yes">
-			<classpath>
-				<pathelement location="../_resources/junit-4.11.jar"/>
-				<pathelement location="../_resources/hamcrest-core-1.3.jar"/>
-				<pathelement location="${bin}"/>
-				<pathelement location="${bin-test}"/>
-				<pathelement path="${java.class.path}"/>
-				<path refid="library-classpath"/>
-			</classpath>
-
-			<formatter type="plain"/>
-			<formatter type="xml"/>
-
-			<batchtest fork="yes" todir="${test-reports}">
-				<fileset dir="${src-test}">
-					<include name="**/*Test*.java"/>
-				</fileset>
-			</batchtest>
-
-		</junit>
-
-	</target>
-
-	<target name="build-test" depends="build">
-		
-		<delete dir="${bin-test}" />
-		<mkdir dir="${bin-test}" />
-
-		<javac srcdir="${src-test}" destdir="${bin-test}" source="${java.target.version}">
-			<classpath>
-				<pathelement location="${bin}"/>
-				<path refid="library-classpath"/>
-				<pathelement location="../_resources/junit-4.11.jar"/>
-				<pathelement location="../_resources/hamcrest-core-1.3.jar"/>
-			</classpath>
-		</javac>
-
-	</target>
-
+    -->
 </project>
