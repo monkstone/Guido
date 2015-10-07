@@ -195,6 +195,10 @@ public class Interactive
         return rae;
     }
 
+    /**
+     *
+     * @param elements
+     */
     public static void add(Object[] elements) {
         for (Object e : elements) {
             Interactive.add(e);
@@ -210,13 +214,17 @@ public class Interactive
         if (Interactive.get().interActiveElements != null) {
             for (Object e : Interactive.get().interActiveElements) {
                 if (((ReflectiveActiveElement) e).getListener() == element) {
-                    Interactive.get().interActiveElements.remove(e);
+                    Interactive.get().interActiveElements.remove((ReflectiveActiveElement)e);
                     break;
                 }
             }
         }
     }
 
+    /**
+     *
+     * @param elements
+     */
     public static void remove(Object[] elements) {
         for (Object e : elements) {
             Interactive.remove(e);
@@ -267,10 +275,23 @@ public class Interactive
         return null;
     }
 
+    /**
+     *
+     * @param eventName
+     * @param targetObject
+     * @param targetMethodName
+     */
     public static void on(String eventName, Object targetObject, String targetMethodName) {
         Interactive.onImpl(null, eventName, targetObject, targetMethodName);
     }
 
+    /**
+     *
+     * @param emitterObjects
+     * @param eventName
+     * @param targetObject
+     * @param targetMethodName
+     */
     public static void on(Object[] emitterObjects, String eventName, Object targetObject, String targetMethodName) {
         if (emitterObjects != null) {
             for (Object e : emitterObjects) {
@@ -281,6 +302,13 @@ public class Interactive
         }
     }
 
+    /**
+     *
+     * @param emitterObject
+     * @param eventName
+     * @param targetObject
+     * @param targetMethodName
+     */
     public static void on(Object emitterObject, String eventName, Object targetObject, String targetMethodName) {
         Interactive.onImpl(emitterObject, eventName, targetObject, targetMethodName);
     }
@@ -314,6 +342,11 @@ public class Interactive
         }
     }
 
+    /**
+     *
+     * @param eventName
+     * @param eventValues
+     */
     public static void send(String eventName, Object... eventValues) {
         if (emitMethod == null) {
             try {
@@ -331,6 +364,12 @@ public class Interactive
         }
     }
 
+    /**
+     *
+     * @param emitterObject
+     * @param eventName
+     * @param eventValues
+     */
     public static void send(Object emitterObject, String eventName, Object... eventValues) {
         if (eventBindings == null) {
             System.err.println("No bindings exist at the moment");
@@ -347,6 +386,10 @@ public class Interactive
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public static boolean isActive() {
         if (manager != null) {
             return manager.isEnabled();
@@ -354,24 +397,37 @@ public class Interactive
         return false;
     }
 
+    /**
+     *
+     */
     public static void toggle() {
         if (manager != null) {
             manager.setEnabled(!manager.isEnabled());
         }
     }
 
+    /**
+     *
+     */
     public static void deactivate() {
         if (manager != null) {
             manager.setEnabled(false);
         }
     }
 
+    /**
+     *
+     */
     public static void activate() {
         if (manager != null) {
             manager.setEnabled(true);
         }
     }
 
+    /**
+     *
+     * @param tf
+     */
     public static void setActive(boolean tf) {
         if (manager != null) {
             manager.setEnabled(tf);
@@ -381,10 +437,19 @@ public class Interactive
     // ------------------------------------------
     //	instance methods
     // ------------------------------------------
-    public boolean isEnabled() {
+
+    /**
+     *
+     * @return
+     */
+        public boolean isEnabled() {
         return enabled;
     }
 
+    /**
+     *
+     * @param tf
+     */
     public void setEnabled(boolean tf) {
         enabled = tf;
     }
@@ -592,6 +657,9 @@ public class Interactive
     private void mouseExited(processing.event.MouseEvent evt) {
     }
 
+    /**
+     *
+     */
     public void dispose() {
         registerMethods(false);
     }

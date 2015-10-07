@@ -13,9 +13,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+/**
+ *
+ * @author Florian Jenett
+ */
 @RunWith(JUnit4.class)
 public class GuidoTests {
 
+    /**
+     *
+     */
     @Test
     public void testSecondConstructor() {
         PApplet papplet = new PApplet();
@@ -28,6 +35,9 @@ public class GuidoTests {
         assertNotSame(ia1, ia3);
     }
 
+    /**
+     *
+     */
     @Test
     public void testIsInsideBasic2DElement() {
         Basic2DElement b2d = new Basic2DElement(100, 100, 200, 200);

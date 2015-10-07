@@ -4,6 +4,10 @@ import java.lang.reflect.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author Florian Jenett
+ */
 public class ReflectiveActiveElement extends AbstractActiveElement {
 
     Object listener;

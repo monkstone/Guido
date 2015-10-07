@@ -1,48 +1,127 @@
 package de.bezier.guido;
 
+/**
+ *
+ * @author Florian Jenett
+ */
 public abstract class AbstractActiveElement extends Basic2DElement {
 
-    protected float clickedMouseX, clickedMouseY;
-    protected float clickedPositionX, clickedPositionY;
-    protected float draggedDistX, draggedDistY;
+    protected float clickedMouseX,
 
-    public boolean pressed, dragged, hover, activated = true;
+    /**
+     *
+     */
+    clickedMouseY;
+    protected float clickedPositionX,
 
+    /**
+     *
+     */
+    clickedPositionY;
+    protected float draggedDistX,
+
+    /**
+     *
+     */
+    draggedDistY;
+
+    public boolean pressed,
+
+    /**
+     *
+     */
+    dragged,
+
+    /**
+     *
+     */
+    hover,
+
+    /**
+     *
+     */
+    activated = true;
+
+    /**
+     *
+     */
     protected boolean debug = false;
 
     long lastPressed = 0;
 
+    /**
+     *
+     */
     public AbstractActiveElement() {
         super();
         Interactive.get().addElement(this);
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
     public AbstractActiveElement(float x, float y, float width, float height) {
         super(x, y, width, height);
         Interactive.get().addElement(this);
     }
 
+    /**
+     *
+     * @param tf
+     */
     public void setDebug(boolean tf) {
         debug = tf;
     }
 
+    /**
+     *
+     * @param yesNo
+     */
     public void setActive(boolean yesNo) {
         activated = yesNo;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isActive() {
         return activated;
     }
 
+    /**
+     *
+     * @param mx
+     * @param my
+     */
     public void mouseEntered(float mx, float my) {
     }
 
+    /**
+     *
+     * @param mx
+     * @param my
+     */
     public void mouseMoved(float mx, float my) {
     }
 
+    /**
+     *
+     * @param mx
+     * @param my
+     */
     public void mouseExited(float mx, float my) {
     }
 
+    /**
+     *
+     * @param mx
+     * @param my
+     */
     public void mousePressedPre(float mx, float my) {
         if (!isActive()) {
             return;
@@ -74,10 +153,26 @@ public abstract class AbstractActiveElement extends Basic2DElement {
     //abstract public void mouseDoubleClicked ( );
     //abstract public void mouseDragged ( float mx, float my );
     //abstract public void mouseReleased ( );
-    abstract public void mousePressed(float mx, float my);
 
+    /**
+     *
+     * @param mx
+     * @param my
+     */
+        abstract public void mousePressed(float mx, float my);
+
+    /**
+     *
+     * @param mx
+     * @param my
+     */
     abstract public void mouseDoubleClicked(float mx, float my);
 
+    /**
+     *
+     * @param mx
+     * @param my
+     */
     public void mouseDraggedPre(float mx, float my) {
         if (!isActive()) {
             return;
@@ -93,8 +188,20 @@ public abstract class AbstractActiveElement extends Basic2DElement {
         }
     }
 
+    /**
+     *
+     * @param mx
+     * @param my
+     * @param dx
+     * @param dy
+     */
     abstract public void mouseDragged(float mx, float my, float dx, float dy);
 
+    /**
+     *
+     * @param mx
+     * @param my
+     */
     public void mouseReleasedPre(float mx, float my) {
         if (!isActive()) {
             return;
@@ -110,16 +217,33 @@ public abstract class AbstractActiveElement extends Basic2DElement {
         }
     }
 
+    /**
+     *
+     * @param mx
+     * @param my
+     */
     abstract public void mouseReleased(float mx, float my);
 
+    /**
+     *
+     * @param mx
+     * @param my
+     */
     public void mouseReleasedPost(float mx, float my) {
         pressed = false;
         dragged = false;
     }
 
+    /**
+     *
+     * @param step
+     */
     public void mouseScrolled(float step) {
     }
 
+    /**
+     *
+     */
     public void draw() {
     }
 }

@@ -7,26 +7,46 @@ import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author Florian Jenett
+ */
 public class EventBinding
 {
 	String eventName;
 	WeakReference<Object> targetWeakReference;
 	Method targetMethod;
 
-	public static String getIdFor ( Object object, String event )
+    /**
+     *
+     * @param object
+     * @param event
+     * @return
+     */
+    public static String getIdFor ( Object object, String event )
 	{
 		if ( object == null ) return "<null>" + "." + event;
 		return object.getClass().getName() + "@" + object.hashCode() + "." + event;
 	}
 
-	public EventBinding ( String eventName, Object targetObject, Method targetMethod )
+    /**
+     *
+     * @param eventName
+     * @param targetObject
+     * @param targetMethod
+     */
+    public EventBinding ( String eventName, Object targetObject, Method targetMethod )
 	{
 		this.eventName = eventName;
 		targetWeakReference = new WeakReference<>(targetObject);
 		this.targetMethod = targetMethod;
 	}
 
-	public void send ( Object[] values )
+    /**
+     *
+     * @param values
+     */
+    public void send ( Object[] values )
 	{
 		if ( targetWeakReference != null )
 		{

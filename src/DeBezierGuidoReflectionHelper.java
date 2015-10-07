@@ -68,7 +68,7 @@ public class DeBezierGuidoReflectionHelper {
             return;
         }
 
-        Class clazz = null;
+        Class clazz; // = null;
 
         for (int i = 0; i < args.length; i += 2) {
             Object fieldNameObj = Array.get(args, i);
