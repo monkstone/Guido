@@ -13,3 +13,6 @@ bin-test
 test-reports
 /nbproject/private/
 /build/
+build.xml
+*~
+
