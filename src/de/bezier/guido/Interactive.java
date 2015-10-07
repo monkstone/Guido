@@ -36,12 +36,21 @@ public class Interactive
 
     private Interactive(PApplet papplet) {
         this.papplet = papplet;
-
-        papplet.registerMethod("mouseEvent", this);
+        registerMethods(true);
 
         addMouseWheelListener();
 
-        papplet.registerMethod("draw", this);
+    }
+
+    final void registerMethods(boolean register) {
+        if (register) {
+            papplet.registerMethod("mouseEvent", this);
+            papplet.registerMethod("draw", this);
+            papplet.registerMethod("dispose", this);
+        } else {
+            papplet.unregisterMethod("mouseEvent", this);
+            papplet.unregisterMethod("draw", this);
+        }
     }
 
     /**
@@ -75,7 +84,7 @@ public class Interactive
      * Main entry point for PApplet (from your sketch).
      *
      * @param papplet
-     * @return 
+     * @return
      */
     public static Interactive make(PApplet papplet) {
         if (manager == null) {
@@ -91,7 +100,7 @@ public class Interactive
      *
      * @param papplet Your sketch
      * @param force Force a new instance
-     * @return 
+     * @return
      * @see #make(PApplet)
      */
     public static Interactive make(PApplet papplet, boolean force) {
@@ -114,7 +123,7 @@ public class Interactive
         return manager;
     }
 
-	// ------------------------------------------
+    // ------------------------------------------
     //	static methods, states, utils
     // ------------------------------------------
     /**
@@ -157,7 +166,7 @@ public class Interactive
      *
      * <p>
      * The easiest way to use this is inside your elements constructor:      <code>
-	 *	public class YourElement {
+     *	public class YourElement {
      *		YourElement () {
      *			Interactive.add( this );
      *		}
@@ -216,6 +225,7 @@ public class Interactive
 
     /**
      * Trying to set a field in an object to a given value.
+     *
      * @param obj
      * @param fieldName
      * @param value
@@ -236,10 +246,11 @@ public class Interactive
 
     /**
      * Get a field from an object by looking at the signature
+     *
      * @param obj fields name and value
      * @param fieldName
      * @param value
-     * @return 
+     * @return
      */
     public static Field getField(Object obj, String fieldName, Object value) {
         Class valueClass = value.getClass();
@@ -251,7 +262,7 @@ public class Interactive
             }
         }
 
-		// what to do here?
+        // what to do here?
         System.err.println("Interactive.set() ... unable to find a field with that name in given target");
         return null;
     }
@@ -367,7 +378,7 @@ public class Interactive
         }
     }
 
-	// ------------------------------------------
+    // ------------------------------------------
     //	instance methods
     // ------------------------------------------
     public boolean isEnabled() {
@@ -521,7 +532,7 @@ public class Interactive
                 mouseExited(evt);
                 break;
             case processing.event.MouseEvent.WHEEL:
-                mouseWheelMovedImpl(evt.getAmount());
+                mouseWheelMovedImpl(evt.getCount());
                 break;
         }
 
@@ -579,5 +590,9 @@ public class Interactive
     }
 
     private void mouseExited(processing.event.MouseEvent evt) {
+    }
+
+    public void dispose() {
+        registerMethods(false);
     }
 }

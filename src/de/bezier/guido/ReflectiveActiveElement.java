@@ -84,7 +84,8 @@ public class ReflectiveActiveElement extends AbstractActiveElement {
                                 "Callback method \"%s\" without arguments is no longer supported!\n"
                                 + "%s() became %s(float mx, float my)",
                                 m.getName(),
-                                paramsLength
+                                paramsLength,
+                                m.getName()
                             ));
                             continue;
                         }
@@ -97,7 +98,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement {
                         System.out.println(mo.getName());
                     }
                 }
-				// else
+                // else
                 // {
                 // 	mo = listener.getClass().getMethod( m.getName(), m.getParameterTypes() );
                 // 	if ( mo != null )
@@ -158,7 +159,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement {
         // 	}
         // }
 
-		// try {
+        // try {
         // 	setter.invoke( null, this, listener );
         // } catch ( Exception e ) {
         // 	if (debug) Logger.getLogger(ReflectiveActiveElement.class.getName()).log(Level.SEVERE, null, e);
@@ -391,9 +392,9 @@ public class ReflectiveActiveElement extends AbstractActiveElement {
 
     /**
      * Deprecated since 0.1.0, use mouseDragged( fl
+     *
      * @param mx
-     * @param my
-     * float dy ) instead
+     * @param my float dy ) instead
      *
      * @deprecated Since 0.1.0, use
      * {@link #mouseDragged(float,float,float,float)} instead
@@ -507,7 +508,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement {
     }
 
     /**
-     * Callback to determin if mouse pointer is over element.
+     * Callback to determine if mouse pointer is over element.
      *
      * A simple rectangle test is automatically done by reading x,y,width,height
      * from your element if available.
@@ -515,7 +516,7 @@ public class ReflectiveActiveElement extends AbstractActiveElement {
      * By implementing this in your class you can alter the test to work with
      * almost any shape and probably even in 3D space.
      *
-     * @param mx 
+     * @param mx
      * @return use pointer x coordinate
      * @param my mouse pointer y coordinate
      * @see de.bezier.guido.Interactive#insideRect(float x,float y,float
